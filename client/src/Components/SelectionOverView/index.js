@@ -12,13 +12,11 @@ const SelectionOverView = ({
   HandleChange,
   JoinRoom,
   createRooms,
+  handleChangeOnRoom,
+  handleCreateRoom,
+  handleChangeShowCreateRoom,
+  showCreateRoom
 }) => {
-  const [showCreateRoom, setShowCreateRooms] = useState(false);
-
-  const handleChangeShowCreateRoom = useCallback(() => {
-    setShowCreateRooms(!showCreateRoom);
-  }, [showCreateRoom]);
-
   return (
     <SelectionDiv color={theme}>
       <div className={"selectfirstlayout"}>
@@ -39,7 +37,7 @@ const SelectionOverView = ({
               required
               className="input"
               type={"text"}
-              name={"room_name"}
+              name={"room"}
               onChange={HandleChange}
             />
           </div>
@@ -52,7 +50,12 @@ const SelectionOverView = ({
         </div>
       </div>
       {showCreateRoom && (
-        <CreateRoom socket={socket} RemoveHandle={handleChangeShowCreateRoom} />
+        <CreateRoom
+          socket={socket}
+          RemoveHandle={handleChangeShowCreateRoom}
+          handleChange={handleChangeOnRoom}
+          handleClick={handleCreateRoom}
+        />
       )}
       <div className={"selectfourthlayout"}>
         <button onClick={JoinRoom} className="button">

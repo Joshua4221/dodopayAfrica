@@ -4,7 +4,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import { MdDeleteForever } from "react-icons/md";
 import ScrollToBottom from "react-scroll-to-bottom";
 
-const Room = ({ createRooms, DeleteRoom }) => {
+const Room = ({ createRooms }) => {
   return (
     <RoomsDiv>
       <ScrollToBottom className="RoomContainer">
@@ -12,7 +12,7 @@ const Room = ({ createRooms, DeleteRoom }) => {
           {createRooms?.map((item, key) => (
             <div key={key} className={"cardbody"}>
               <div className={"title"}>
-                <p>{item.room_name}</p>
+                <p>{item.room}</p>
               </div>
             </div>
           ))}

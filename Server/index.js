@@ -26,19 +26,21 @@ io.on("connection", (socket) => {
   console.log("client connected: ", socket.id);
 
   socket.on("join_room", (data) => {
-    console.log(data);
-    socket.join(data.room_name);
+    console.log(data.room);
+    socket.join(data.room);
     console.log("just join");
-    socket.to(data.room_name).emit("totaluser", data);
+    socket.to(data.room).emit("totaluser", data);
   });
 
   socket.on("send_message", (data) => {
-    socket.to(data.room_name).emit("receive_message", data);
+    console.log(data);
+    socket.to(data.room).emit("receive_message", data);
   });
 
   socket.on("create-room", (data) => {
+    socket.join(data.room);
     console.log(data);
-    socket.emit("receive-room", data);
+    socket.broadcast.emit("receive-room", data);
   });
 
   socket.on("disconnect", () => {

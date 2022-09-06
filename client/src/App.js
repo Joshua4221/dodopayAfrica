@@ -16,6 +16,27 @@ function App() {
   const [userCollection, setUserCollection] = useState([]);
   const [userMessage, setUserMessage] = useState({});
   const [messageList, setMessageList] = useState([]);
+  const [roomData, setRoomData] = useState({});
+  const [showCreateRoom, setShowCreateRooms] = useState(false);
+
+  const handleChangeOnRoom = (e) => {
+    const { name, value } = e.target;
+    setRoomData({ ...roomData, [name]: value });
+    console.log(name);
+  };
+
+  const handleChangeShowCreateRoom = useCallback(() => {
+    setShowCreateRooms(!showCreateRoom);
+  }, [showCreateRoom]);
+
+  const handleCreateRoom = useCallback(() => {
+    console.log("david");
+    if (Object.keys(roomData).length > 1) {
+      socket.emit("create-room", roomData);
+      setCreateRooms((createRooms) => [...createRooms, roomData]);
+      handleChangeShowCreateRoom();
+    }
+  }, [socket, roomData]);
 
   const HandleChange = useCallback(
     (e) => {
@@ -27,7 +48,7 @@ function App() {
 
   const JoinRoom = useCallback(() => {
     const roomCheck = createRooms.find(
-      (item) => item.room_name === userData.room_name
+      (item) => item.room === userData.room
     );
     if (Object.keys(userData).length > 1 && roomCheck) {
       socket.emit("join_room", userData);
@@ -64,9 +85,13 @@ function App() {
 
   useEffect(() => {
     socket.on("receive-room", (data) => {
-      setCreateRooms((createRooms) => [...createRooms, data]);
+      if (!createRooms.find((item, key) => item.room === data.room)) {
+        setCreateRooms((createRooms) => [...createRooms, data]);
+      }
     });
+  }, [socket]);
 
+  useEffect(() => {
     if (showDashboard) {
       socket.on("totaluser", (data) => {
         console.log(data);
@@ -74,12 +99,13 @@ function App() {
       });
 
       socket.on("receive_message", (data) => {
+        console.log(data);
         if (data) {
           setMessageList((messageList) => [...messageList, data]);
         }
       });
     }
-  }, [socket]);
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -91,6 +117,10 @@ function App() {
               HandleChange={HandleChange}
               JoinRoom={JoinRoom}
               createRooms={createRooms}
+              handleChangeOnRoom={handleChangeOnRoom}
+              handleCreateRoom={handleCreateRoom}
+              handleChangeShowCreateRoom={handleChangeShowCreateRoom}
+              showCreateRoom={showCreateRoom}
             />
           )}
           {showDashboard && (

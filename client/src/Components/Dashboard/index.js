@@ -32,7 +32,7 @@ const Dashboard = ({
               <p>Room Name</p>
             </div>
             <div className="sidebarroomname">
-              <p>{userDetails.room_name}</p>
+              <p>{userDetails.room}</p>
             </div>
           </div>
           <div className="sidebarfooter">

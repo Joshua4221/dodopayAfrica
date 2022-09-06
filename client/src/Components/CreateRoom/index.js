@@ -3,20 +3,8 @@ import { withTheme } from "styled-components";
 import { CreateRoomDiv } from "./createroom.style";
 import { MdClose } from "react-icons/md";
 
-const CreateRoom = ({ RemoveHandle, socket }) => {
-  const [roomData, setRoomData] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setRoomData({ ...roomData, [name]: value });
-  };
-
-  const handleClick = useCallback(() => {
-    if (Object.keys(roomData).length > 1) {
-      socket.emit("create-room", roomData);
-      RemoveHandle();
-    }
-  }, [socket, roomData, RemoveHandle]);
+const CreateRoom = ({ RemoveHandle, handleChange, handleClick }) => {
+  
 
   return (
     <CreateRoomDiv>
@@ -47,7 +35,7 @@ const CreateRoom = ({ RemoveHandle, socket }) => {
                   required
                   className="input"
                   type={"text"}
-                  name={"room_name"}
+                  name={"room"}
                   onChange={handleChange}
                 />
               </div>
